@@ -5,7 +5,7 @@ from astropy.coordinates import SkyCoord
 from astropy import units as u
 from astropy.table import Table, Column
 
-from load_catalogs import *
+from load_catalogs import dr8,vollim,logmass,logsfr,mass_to_light,kcorrect
 #from make_prop_array import make_prop_array
 
 """This script makes cross-matched catalogues useful for data analysis with 
@@ -38,27 +38,47 @@ sdss = {
     "redshift_err": dr8[vollim]["Z_ERR"],
     "AB_EXP": dr8[vollim]["AB_EXP"][:, 2],
     "FRACPSF": dr8[vollim]["FRACPSF"][:, 2],
-
+    "SPECPRIMARY": dr8[vollim]["SPECPRIMARY"],
     "cmodel_M_u": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0"][:, 0],
+    "cmodel_M_u_z0P1": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0P1"][:, 0],
     "model_M_u": kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 0],
+    "model_M_u_z0P1": kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 0],
     "cmodel_M_g": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0"][:, 1],
+    "cmodel_M_g_z0P1": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0P1"][:, 1],
     "model_M_g": kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 1],
+    "model_M_g_z0P1": kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 1],
     "cmodel_M_r": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0"][:, 2],
+    "cmodel_M_r_z0P1": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0P1"][:, 2],
     "model_M_r": kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 2],
+    "model_M_r_z0P1": kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 2],
     "cmodel_M_i": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0"][:, 3],
+    "cmodel_M_i_z0P1": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0P1"][:, 3],
     "model_M_i": kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 3],
+    "model_M_i_z0P1": kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 3],
     "cmodel_M_z": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0"][:, 4],
+    "cmodel_M_z_z0P1": kcorrect["CMODEL_UGRIZ_ABSMAGS_K0P1"][:, 4],
     "model_M_z": kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 4],
+    "model_M_z_z0P1": kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 4],
     "cmodel_M_U": kcorrect["CMODEL_UBVRI_ABSMAGS_K0"][:, 0],
+    "cmodel_M_U_z0P1": kcorrect["CMODEL_UBVRI_ABSMAGS_K0P1"][:, 0],
     "model_M_U": kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 0],
+    "model_M_U_z0P1": kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 0],
     "cmodel_M_B": kcorrect["CMODEL_UBVRI_ABSMAGS_K0"][:, 1],
+    "cmodel_M_B_z0P1": kcorrect["CMODEL_UBVRI_ABSMAGS_K0P1"][:, 1],
     "model_M_B": kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 1],
+    "model_M_B_z0P1": kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 1],
     "cmodel_M_V": kcorrect["CMODEL_UBVRI_ABSMAGS_K0"][:, 2],
+    "cmodel_M_V_z0P1": kcorrect["CMODEL_UBVRI_ABSMAGS_K0P1"][:, 2],
     "model_M_V": kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 2],
+    "model_M_V_z0P1": kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 2],
     "cmodel_M_R": kcorrect["CMODEL_UBVRI_ABSMAGS_K0"][:, 3],
+    "cmodel_M_R_z0P1": kcorrect["CMODEL_UBVRI_ABSMAGS_K0P1"][:, 3],
     "model_M_R": kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 3],
+    "model_M_R_z0P1": kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 3],
     "cmodel_M_I": kcorrect["CMODEL_UBVRI_ABSMAGS_K0"][:, 4],
+    "cmodel_M_I_z0P1": kcorrect["CMODEL_UBVRI_ABSMAGS_K0P1"][:, 4],
     "model_M_I": kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 4],
+    "model_M_I_z0P1": kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 4],
     "gmr": kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 1]
     - kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 2],
     "umg": kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 0]
@@ -83,6 +103,26 @@ sdss = {
         )
         / 2
     ),
+    "mass_to_light_u" : mass_to_light["UGRIZ_K0"][:,0],
+    "mass_to_light_u_z0P1" : mass_to_light["UGRIZ_K0P1"][:,0],
+    "mass_to_light_g" : mass_to_light["UGRIZ_K0"][:,1],
+    "mass_to_light_g_z0P1" : mass_to_light["UGRIZ_K0P1"][:,1],
+    "mass_to_light_r" : mass_to_light["UGRIZ_K0"][:,2],
+    "mass_to_light_r_z0P1" : mass_to_light["UGRIZ_K0P1"][:,2],
+    "mass_to_light_i" : mass_to_light["UGRIZ_K0"][:,3],
+    "mass_to_light_i_z0P1" : mass_to_light["UGRIZ_K0P1"][:,3],
+    "mass_to_light_z" : mass_to_light["UGRIZ_K0"][:,4],
+    "mass_to_light_z_z0P1" : mass_to_light["UGRIZ_K0P1"][:,4],
+    "mass_to_light_U" : mass_to_light["UBVRI_K0"][:,0],
+    "mass_to_light_U_z0P1" : mass_to_light["UBVRI_K0P1"][:,0],
+    "mass_to_light_B" : mass_to_light["UBVRI_K0"][:,1],
+    "mass_to_light_B_z0P1" : mass_to_light["UBVRI_K0P1"][:,1],
+    "mass_to_light_V" : mass_to_light["UBVRI_K0"][:,2],
+    "mass_to_light_V_z0P1" : mass_to_light["UBVRI_K0P1"][:,2],
+    "mass_to_light_R" : mass_to_light["UBVRI_K0"][:,3],
+    "mass_to_light_R_z0P1" : mass_to_light["UBVRI_K0P1"][:,3],
+    "mass_to_light_I" : mass_to_light["UBVRI_K0"][:,4],
+    "mass_to_light_I_z0P1" : mass_to_light["UBVRI_K0P1"][:,4],
 }
 sdss_catalog = Table(sdss)
 sdss_catalog_df = pd.DataFrame(sdss)

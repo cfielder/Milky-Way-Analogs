@@ -40,6 +40,6 @@ cross_matched_catalog_df.to_pickle("Vollim_Simard_Cross_match")
 #mass_to_light = mass_to_light[vollim][sep_idx_simard]
 #prop = make_prop_array(kcorrect,mass_to_light,np.size(vollim[sep_idx_simard]))
 #np.save("prop_vollim_simard", prop)
-np.save("sep_idx_simard", sep_idx_simard)
+#np.save("sep_idx_simard", sep_idx_simard)
 
 print(len(cross_matched_catalog_df["dr8_RA"]))
