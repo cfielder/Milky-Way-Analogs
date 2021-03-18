@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def make_prop_array(kcorrect, mass_to_light, size):
+def make_prop_array(df):
     """Since we are only interested in the kcorrected colors and absmags of milky way analogs,
     concisely organize array marked by
     [absmag/color/mass_to_light, z=0/z=0.1, bandpass/color_index, object]
@@ -9,14 +9,7 @@ def make_prop_array(kcorrect, mass_to_light, size):
     the statistics, etc. are calculated from.
 
     Args:
-        kcorrect (fits table): The k-corrected catalog that is generated from the SDSS DR8
-            volume limited sample.
-        mass_to_light (fits table): The catalog of the mass to light ratios of the SDSS DR8
-            volume limited sample.
-        size (int): The size of the sub-sample being used for analyzing milky way analogs. 
-            It is assumed that kcorrect and mass_to_light have already been cross-matched and 
-            indexed to match the the sub-sample of galaxies of interest (if any, otherwise vollim
-            should be the default).
+        df (pandas dataframe): Dataframe that has the info we are drawing from.
 
     Returns:
         A 2D array of the properties with which mw_color_lum_stats() will run analysis on.
@@ -24,106 +17,78 @@ def make_prop_array(kcorrect, mass_to_light, size):
         appropriately. We recommend that after this function is called the array is saved
         for ease of use.
     """
-    prop = np.zeros((3, 2, 10, size))
+    prop = np.zeros((3, 2, 10, len(df)))
     # z=0 abs mags (CMODEL)
-    prop[0, 0, :5, :] = kcorrect["CMODEL_UGRIZ_ABSMAGS_K0"].transpose()
+    prop[0, 0, 0, :] = df.cmodel_M_u.values
+    prop[0, 0, 1, :] = df.cmodel_M_g.values
+    prop[0, 0, 2, :] = df.cmodel_M_r.values
+    prop[0, 0, 3, :] = df.cmodel_M_i.values
+    prop[0, 0, 4, :] = df.cmodel_M_z.values
     # z=0.1 abs mags (CMODEL)
-    prop[0, 1, :5, :] = kcorrect["CMODEL_UGRIZ_ABSMAGS_K0P1"].transpose()
+    prop[0, 1, 0, :] = df.cmodel_M_u_z0P1.values
+    prop[0, 1, 1, :] = df.cmodel_M_g_z0P1.values
+    prop[0, 1, 2, :] = df.cmodel_M_r_z0P1.values
+    prop[0, 1, 3, :] = df.cmodel_M_i_z0P1.values
+    prop[0, 1, 4, :] = df.cmodel_M_z_z0P1.values
     # z=0 abs mags (CMODEL) johnson
-    prop[0, 0, 5:10, :] = kcorrect["CMODEL_UBVRI_ABSMAGS_K0"].transpose()
+    prop[0, 0, 5, :] = df.cmodel_M_U.values
+    prop[0, 0, 6, :] = df.cmodel_M_B.values
+    prop[0, 0, 7, :] = df.cmodel_M_V.values
+    prop[0, 0, 8, :] = df.cmodel_M_R.values
+    prop[0, 0, 9, :] = df.cmodel_M_I.values
     # z=0.1 abs mags (CMODEL) Johnson
-    prop[0, 1, 5:10, :] = kcorrect["CMODEL_UBVRI_ABSMAGS_K0P1"].transpose()
+    prop[0, 1, 5, :] = df.cmodel_M_U_z0P1.values
+    prop[0, 1, 6, :] = df.cmodel_M_B_z0P1.values
+    prop[0, 1, 7, :] = df.cmodel_M_V_z0P1.values
+    prop[0, 1, 8, :] = df.cmodel_M_R_z0P1.values
+    prop[0, 1, 9, :] = df.cmodel_M_I_z0P1.values
     # z=0  mass to light ugriz
-    prop[2, 0, :5, :] = mass_to_light["UGRIZ_K0"].transpose()
+    prop[2, 0, 0, :] = df.mass_to_light_u.values
+    prop[2, 0, 1, :] = df.mass_to_light_g.values
+    prop[2, 0, 2, :] = df.mass_to_light_r.values
+    prop[2, 0, 3, :] = df.mass_to_light_i.values
+    prop[2, 0, 4, :] = df.mass_to_light_z.values
     # z=0.1 mass to light ugriz
-    prop[2, 1, :5, :] = mass_to_light["UGRIZ_K0P1"].transpose()
+    prop[2, 1, 0, :] = df.mass_to_light_u_z0P1.values
+    prop[2, 1, 1, :] = df.mass_to_light_g_z0P1.values
+    prop[2, 1, 2, :] = df.mass_to_light_r_z0P1.values
+    prop[2, 1, 3, :] = df.mass_to_light_i_z0P1.values
+    prop[2, 1, 4, :] = df.mass_to_light_z_z0P1.values
     # z=0 mass to light Johnsons
-    prop[2, 0, 5:10, :] = mass_to_light["UBVRI_K0"].transpose()
-    # z=0.1 mass to light Johnsons
-    prop[2, 1, 5:10, :] = mass_to_light["UBVRI_K0P1"].transpose()
+    prop[2, 0, 5, :] = df.mass_to_light_U.values
+    prop[2, 0, 6, :] = df.mass_to_light_B.values
+    prop[2, 0, 7, :] = df.mass_to_light_V.values
+    prop[2, 0, 8, :] = df.mass_to_light_R.values
+    prop[2, 0, 9, :] = df.mass_to_light_I.values
+    #z=0.1 mass to light Johnsons
+    prop[2, 1, 5, :] = df.mass_to_light_U_z0P1.values
+    prop[2, 1, 6, :] = df.mass_to_light_B_z0P1.values
+    prop[2, 1, 7, :] = df.mass_to_light_V_z0P1.values
+    prop[2, 1, 8, :] = df.mass_to_light_R_z0P1.values
+    prop[2, 1, 9, :] = df.mass_to_light_I_z0P1.values
     # z=0 colors ugriz (MODEL)
-    prop[1, 0, 0, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 0]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 1]
-    )
-    prop[1, 0, 1, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 0]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 2]
-    )
-    prop[1, 0, 2, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 1]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 2]
-    )
-    prop[1, 0, 3, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 2]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 3]
-    )
-    prop[1, 0, 4, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 3]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0"][:, 4]
-    )
+    prop[1, 0, 0, :] = df.model_M_u.values - df.model_M_g.values
+    prop[1, 0, 1, :] = df.model_M_u.values - df.model_M_r.values
+    prop[1, 0, 2, :] = df.model_M_g.values - df.model_M_r.values
+    prop[1, 0, 3, :] = df.model_M_r.values - df.model_M_i.values
+    prop[1, 0, 4, :] = df.model_M_i.values - df.model_M_z.values
     # z=0.1 colors ugriz(MODEL)
-    prop[1, 1, 0, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 0]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 1]
-    )
-    prop[1, 1, 1, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 0]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 2]
-    )
-    prop[1, 1, 2, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 1]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 2]
-    )
-    prop[1, 1, 3, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 2]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 3]
-    )
-    prop[1, 1, 4, :] = np.transpose(
-        kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 3]
-        - kcorrect["MODEL_UGRIZ_ABSMAGS_K0P1"][:, 4]
-    )
+    prop[1, 1, 0, :] = df.model_M_u_z0P1.values - df.model_M_g_z0P1.values
+    prop[1, 1, 1, :] = df.model_M_u_z0P1.values - df.model_M_r_z0P1.values
+    prop[1, 1, 2, :] = df.model_M_g_z0P1.values - df.model_M_r_z0P1.values
+    prop[1, 1, 3, :] = df.model_M_r_z0P1.values - df.model_M_i_z0P1.values
+    prop[1, 1, 4, :] = df.model_M_i_z0P1.values - df.model_M_z_z0P1.values
     # z=0 colors Johnsons
-    prop[1, 0, 5, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 0]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 1]
-    )
-    prop[1, 0, 6, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 0]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 2]
-    )
-    prop[1, 0, 7, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 1]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 2]
-    )
-    prop[1, 0, 8, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 2]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 3]
-    )
-    prop[1, 0, 9, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 3]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0"][:, 4]
-    )
+    prop[1, 0, 5, :] = df.model_M_U.values - df.model_M_B.values
+    prop[1, 0, 6, :] = df.model_M_U.values - df.model_M_V.values
+    prop[1, 0, 7, :] = df.model_M_B.values - df.model_M_V.values
+    prop[1, 0, 8, :] = df.model_M_V.values - df.model_M_R.values
+    prop[1, 0, 9, :] = df.model_M_R.values - df.model_M_I.values
     # z=0.1 colors Johnsons
-    prop[1, 1, 5, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 0]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 1]
-    )
-    prop[1, 1, 6, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 0]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 2]
-    )
-    prop[1, 1, 7, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 1]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 2]
-    )
-    prop[1, 1, 8, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 2]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 3]
-    )
-    prop[1, 1, 9, :] = np.transpose(
-        kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 3]
-        - kcorrect["MODEL_UBVRI_ABSMAGS_K0P1"][:, 4]
-    )
+    prop[1, 1, 5, :] = df.model_M_U_z0P1.values - df.model_M_B_z0P1.values
+    prop[1, 1, 6, :] = df.model_M_U_z0P1.values - df.model_M_V_z0P1.values
+    prop[1, 1, 7, :] = df.model_M_B_z0P1.values - df.model_M_V_z0P1.values
+    prop[1, 1, 8, :] = df.model_M_V_z0P1.values - df.model_M_R_z0P1.values
+    prop[1, 1, 9, :] = df.model_M_R_z0P1.values - df.model_M_I_z0P1.values
 
     return prop

@@ -56,7 +56,7 @@ def do_full_analysis(
     """
     if get_analogs:
         mwanalogs = select_analogs(galaxies, mw, **kwargs)
-        np.save(filename, mwanalogs)
+        np.save(Path.home() / filename, mwanalogs)
     if not get_analogs:
         mwanalogs = np.load(Path.home() / "MW_Morphology" / filename)
     if get_plots:
@@ -70,10 +70,5 @@ def do_full_analysis(
             mwanalogs,
             matched_catalog,
             prop,
-            raw_props=True,
-            eddbias=True,
-            corrected_props=True,
-            derivatives=True,
-            axistest=True,
             **kwargs
         )
