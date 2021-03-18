@@ -32,7 +32,8 @@ def mw_analog_auto(
             and the data is scaled approiately. 
             Example:
                 tree = spatial.cKDTree(search_space)
-        mw (dataframe): A dataframe that contains the measured Milky Way values,                        and the random point drawn from the posterior probability 
+        mw (dataframe): A dataframe that contains the measured Milky Way values,
+            and the random point drawn from the posterior probability
             distribution.
             Example:
                 mstar = [mw_mean_log_mstar, mw_sigma_log_mstar]
@@ -63,8 +64,8 @@ def mw_analog_auto(
     n_params = int(len(list(mw)))
     if not silent:
         print("You have {} parameter input.".format(n_params))
-    if n_params == 1:
-        raise ValueError("You have too few parameters.")
+    #if n_params == 1:
+    #    raise ValueError("You have too few parameters.")
 
     # Find nearest neighbors
     # First we must scale the data correctly

@@ -221,7 +221,7 @@ def mw_color_lum_stats(
     """
     # Define where .npz files are saved
     # CHANGE TO MATCH WITH YOUR FILE STRUCTURE
-    path_outputs = Path.home() / "MW_morphology"
+    path_outputs = Path.home()
 
     # Cast matched_catalog from dataframe to astropy table for ease of use
     matched_catalog = Table.from_pandas(matched_catalog)
@@ -293,10 +293,10 @@ def mw_color_lum_stats(
                     )
                     lse_prop[p, z, bc] = mean_prop[p, z, bc] - function(0.16)
                     hse_prop[p, z, bc] = function(0.84) - mean_prop[p, z, bc]
-
+        print(path_outputs)
         # save the raw statistics and the samples used
         np.savez(
-            "raw_props_z0.09.npz",
+            path_outputs / "raw_props.npz",
             mean_prop=mean_prop,
             lse_prop=lse_prop,
             hse_prop=hse_prop,
@@ -432,7 +432,7 @@ def mw_color_lum_stats(
 
         # save the eddington bias statistics separately
         np.savez(
-            "eddbias_z0.09.npz",
+            "eddbias.npz",
             pert_prop=pert_prop,
             hlmeans=hlmeans,
             delta_mean=delta_mean,
